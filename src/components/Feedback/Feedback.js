@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Section from './Section';
-import Statistics from './Statistics';
+import FeedbackOptions from './FeedbackOptions';
 import Value from './Value';
 import s from './Feedback.module.css';
 import Notification from './Notification';
@@ -12,31 +12,14 @@ class Feedback extends Component {
     bad: this.props.initialValue,
   };
 
-  goodFeedBackIncrement = e => {
-    this.setState(prevState => {
-      return {
-        good: prevState.good + 1,
-      };
-    });
-  };
-  neutralFeedBackIncrement = e => {
-    this.setState(prevState => {
-      return {
-        neutral: prevState.neutral + 1,
-      };
-    });
-  };
-  badFeedBackIncrement = e => {
-    this.setState(prevState => {
-      return {
-        bad: prevState.bad + 1,
-      };
-    });
+  onLeaveFeedback = item => {
+    this.setState(prevState => ({
+      [item]: prevState[item] + 1,
+    }));
   };
 
   countTotalFeedback() {
     return Object.values(this.state).reduce((acc, item) => acc + item, 0);
-    // return this.state.good + this.state.neutral + this.state.bad;
   }
 
   countPositiveFeedbackPercentage() {
@@ -47,10 +30,9 @@ class Feedback extends Component {
     return (
       <div className={s.feedback}>
         <Section title="Please leave feedback">
-          <Statistics
-            good={this.goodFeedBackIncrement}
-            neutral={this.neutralFeedBackIncrement}
-            bad={this.badFeedBackIncrement}
+          <FeedbackOptions
+            options={Object.keys(this.state)}
+            onLeaveFeedback={this.onLeaveFeedback}
           />
         </Section>
         <Section title="Statistics" className={s.statistics}>
